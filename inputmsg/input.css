@@ -22,3 +22,19 @@
 .Dot3 {
     animation-delay: 0.6s;
 }
+
+@keyframes gradient {
+    0% {
+        background: #e0d4e6;
+    }
+    50% {
+        background: #e4d2e9;
+    }
+    100% {
+        background: #f1d3f8;
+    }
+}
+
+.next-button:hover div {
+    animation: gradient 1s infinite;
+}
