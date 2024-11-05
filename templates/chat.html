@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ step['label'] }} - 바다거북수프 문제풀이</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <div class="problem">
+                <h1>{{ step['label'] }}</h1>
+                <p class="instructions">질문을 입력하고 바다거북수프 문제를 풀어보세요.</p>
+                <div class="puzzle">
+                    <p>{{ step['problem']|safe }}</p>
+                </div>
+            </div>
+            <div class="chat-container">
+                <div id="chat-box" class="chat-box"></div>
+                <input id="chat-input" type="text" class="chat-input" placeholder="메시지를 입력하세요...">
+                <button id="chat-button" class="chat-button">전송</button>
+                <button id="reset-button" class="chat-button">대화 초기화</button>
+                <a href="/" class="chat-button">메인 화면으로 돌아가기</a>
+            </div>
+        </div>
+    </div>
+    <div id="clear-overlay" class="clear-overlay" style="display:none;">
+        <div class="clear-content">
+            <h2>클리어!</h2>
+            <p>정답: {{ step['answer']|safe }}</p>
+            <a href="{{ url_for('step', step_id=step['id']+1) }}" class="chat-button">다음 단계</a>
+            <a href="/" class="chat-button">메인 화면으로 돌아가기</a>
+        </div>
+    </div>
+
+    <script>
+        const sendMessage = async () => {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            if (message.trim() === '') return;
+
+            const chatBox = document.getElementById('chat-box');
+            chatBox.innerHTML += `<div class="message user">${message}</div>`;
+            input.value = '';
+
+            const response = await fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message })
+            });
+
+            const data = await response.json();
+            if (data.response === "[클리어]") {
+                document.getElementById('clear-overlay').style.display = 'flex';
+            } else {
+                chatBox.innerHTML += `<div class="message bot">${data.response}</div>`;
+            }
+
+            chatBox.scrollTop = chatBox.scrollHeight;
+        };
+
+        document.getElementById('chat-button').addEventListener('click', sendMessage);
+
+        document.getElementById('chat-input').addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                sendMessage();
+                event.preventDefault();
+            }
+        });
+
+        document.getElementById('reset-button').addEventListener('click', async () => {
+            const stepId = {{ step['id'] }};
+            const response = await fetch('/reset_chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ step_id: stepId })
+            });
+
+            const data = await response.json();
+            if (data.status === 'Chat history cleared') {
+                document.getElementById('chat-box').innerHTML = '';
+            }
+        });
+    </script>
+</body>
+</html>
