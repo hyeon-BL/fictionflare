@@ -23,13 +23,7 @@
             </div>
             <div class="chat-container">
                 <div id="chat-box" class="chat-box">
-                    <div id="typing-indicator" class="typing-indicator" style="display: none;">
-                        <div class="wave">
-                            <div class="dot"></div>
-                            <div class="dot"></div>
-                            <div class="dot"></div>
-                        </div>
-                    </div>
+                    <!-- Typing indicator will be dynamically added here -->
                 </div>
                 <div class="chat-input-container">
                     <input id="chat-input" type="text" class="chat-input" placeholder="메시지를 입력하세요...">
@@ -78,18 +72,37 @@
 
         document.getElementById('chat-button').addEventListener('click', sendMessage);
 
+        document.getElementById('chat-input').addEventListener('input', () => {
+            const chatBox = document.getElementById('chat-box');
+            let typingIndicator = document.getElementById('typing-indicator');
+            if (!typingIndicator) {
+                typingIndicator = document.createElement('div');
+                typingIndicator.id = 'typing-indicator';
+                typingIndicator.className = 'message typing-indicator';
+                typingIndicator.innerHTML = `
+                    <div class="wave">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
+                `;
+                chatBox.appendChild(typingIndicator);
+            }
+            typingIndicator.style.display = 'block';
+            clearTimeout(window.typingTimeout);
+            window.typingTimeout = setTimeout(() => {
+                typingIndicator.style.display = 'none';
+            }, 1000);
+        });
+
         document.getElementById('chat-input').addEventListener('keypress', (event) => {
-            const typingIndicator = document.getElementById('typing-indicator');
             if (event.key === 'Enter') {
                 sendMessage();
                 event.preventDefault();
-                typingIndicator.style.display = 'none';
-            } else {
-                typingIndicator.style.display = 'block';
-                clearTimeout(window.typingTimeout);
-                window.typingTimeout = setTimeout(() => {
+                const typingIndicator = document.getElementById('typing-indicator');
+                if (typingIndicator) {
                     typingIndicator.style.display = 'none';
-                }, 1000);
+                }
             }
         });
 
