@@ -135,11 +135,11 @@ h1 {
 }
 
 .message.typing-indicator {
-    background-color: #ECECEC;
+    background-color: #DCF8C6;
     color: #131313;
     align-self: flex-end;
     text-align: right;
-    margin-right: auto;
+    margin-left: auto;
     border-radius: 10px; /* 둥근 모서리 */
 }
 
