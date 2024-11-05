@@ -90,6 +90,7 @@
                 chatBox.appendChild(typingIndicator);
             }
             typingIndicator.style.display = 'block';
+            chatBox.appendChild(typingIndicator); // Ensure it is at the end
             clearTimeout(window.typingTimeout);
             window.typingTimeout = setTimeout(() => {
                 typingIndicator.style.display = 'none';
