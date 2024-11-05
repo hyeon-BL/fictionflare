@@ -22,11 +22,20 @@
                 </div>
             </div>
             <div class="chat-container">
-                <div id="chat-box" class="chat-box"></div>
-                <input id="chat-input" type="text" class="chat-input" placeholder="메시지를 입력하세요...">
-                <button id="chat-button" class="chat-button">전송</button>
+                <div id="chat-box" class="chat-box">
+                    <div id="typing-indicator" class="typing-indicator" style="display: none;">
+                        <div class="wave">
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-input-container">
+                    <input id="chat-input" type="text" class="chat-input" placeholder="메시지를 입력하세요...">
+                    <button id="chat-button" class="chat-button">전송</button>
+                </div>
                 <button id="reset-button" class="chat-button">대화 초기화</button>
-                <a href="/" class="chat-button">메인 화면으로 돌아가기</a>
             </div>
         </div>
     </div>
@@ -35,7 +44,7 @@
             <h2>클리어!</h2>
             <p>정답: {{ step['answer']|safe }}</p>
             <a href="{{ url_for('step', step_id=step['id']+1) }}" class="chat-button">다음 단계</a>
-            <a href="/" class="chat-button">메인 화면으로 돌아가기</a>
+            <!-- <a href="/" class="chat-button">메인 화면으로 돌아가기</a> -->
         </div>
     </div>
 
@@ -70,9 +79,17 @@
         document.getElementById('chat-button').addEventListener('click', sendMessage);
 
         document.getElementById('chat-input').addEventListener('keypress', (event) => {
+            const typingIndicator = document.getElementById('typing-indicator');
             if (event.key === 'Enter') {
                 sendMessage();
                 event.preventDefault();
+                typingIndicator.style.display = 'none';
+            } else {
+                typingIndicator.style.display = 'block';
+                clearTimeout(window.typingTimeout);
+                window.typingTimeout = setTimeout(() => {
+                    typingIndicator.style.display = 'none';
+                }, 1000);
             }
         });
 

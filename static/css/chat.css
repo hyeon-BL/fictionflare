@@ -55,7 +55,7 @@ h1 {
     width: 400px;
     display: flex;
     flex-direction: column;
-    padding: 20px;
+    padding: 0;
     border: 1px solid #ccc;
     border-radius: 15px; /* 둥근 모서리 */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -65,38 +65,38 @@ h1 {
 
 .chat-box {
     flex-grow: 1;
-    border: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
     padding: 10px;
     overflow-y: auto;
-    margin-bottom: 10px;
-    max-height: calc(100% - 150px); /* 버튼과 입력 필드 높이를 제외한 최대 높이 설정 */
+    max-height: calc(100% - 60px); /* 버튼과 입력 필드 높이를 제외한 최대 높이 설정 */
     display: flex;
     flex-direction: column;
     background-color: #fafafa; /* 옅은 회색 배경 */
     border-radius: 10px; /* 둥근 모서리 */
 }
 
-.chat-input {
-    width: calc(100% - 20px);
+.chat-input-container {
+    display: flex;
+    border-top: 1px solid #ccc;
     padding: 10px;
-    margin-bottom: 10px;
+    background-color: #fff;
+}
+
+.chat-input {
+    flex-grow: 1;
+    padding: 10px;
     border: 1px solid #ccc;
-    border-radius: 5px; /* 둥근 모서리 */
+    border-radius: 20px; /* 둥근 모서리 */
+    margin-right: 10px;
 }
 
 .chat-button {
-    font-family: "Do Hyeon", serif;
-    font-weight: 400;
-    font-style: normal;
     padding: 10px 20px;
     background-color: #4CAF50;
     color: white;
     border: none;
     cursor: pointer;
-    margin-bottom: 10px;
-    text-decoration: none;
-    text-align: center;
-    border-radius: 10px; /* 둥근 모서리 */
+    border-radius: 20px; /* 둥근 모서리 */
     font-size: 16px; /* 텍스트 크기 증가 */
 }
 
@@ -110,14 +110,14 @@ h1 {
     font-style: normal;
     margin-bottom: 10px;
     padding: 10px;
-    border-radius: 10px;
+    border-radius: 20px; /* 둥근 모서리 */
     word-wrap: break-word;
     max-width: 80%;
     display: inline-block;
 }
 
 .message.user {
-    background-color: #F6F6F6;
+    background-color: #DCF8C6;
     color: #131313;
     align-self: flex-end;
     text-align: right;
@@ -126,12 +126,50 @@ h1 {
 }
 
 .message.bot {
-    background-color: #6D4F4F;
-    color: #FFFFFF;
+    background-color: #ECECEC;
+    color: #131313;
     align-self: flex-start;
     text-align: left;
     margin-right: auto;
     border-radius: 10px; /* 둥근 모서리 */
+}
+
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+}
+
+.wave {
+    display: flex;
+    align-items: center;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    margin: 0 2px;
+    background-color: #ccc;
+    border-radius: 50%;
+    animation: wave 1.2s linear infinite;
+}
+
+.dot:nth-child(2) {
+    animation-delay: -1.1s;
+}
+
+.dot:nth-child(3) {
+    animation-delay: -1s;
+}
+
+@keyframes wave {
+    0%, 60%, 100% {
+        transform: initial;
+    }
+    30% {
+        transform: translateY(-10px);
+    }
 }
 
 .clear-overlay {
@@ -219,7 +257,7 @@ h1 {
     }
 
     .problem h1, .problem p {
-        font-size: 18px; /* 모바일에서 텍스트 크기 조정 */
+        font-size: 18px; /* 모바일���서 텍스트 크기 조정 */
         word-break: break-word; /* 텍스트가 잘리지 않도록 */
         white-space: normal; /* 텍스트 줄바꿈 허용 */
     }
