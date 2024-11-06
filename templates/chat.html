@@ -43,6 +43,16 @@
     </div>
 
     <script>
+        const saveChatHistory = async (userMessage, botMessage) => {
+            await fetch('/save_chat_history', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ user_message: userMessage, bot_message: botMessage })
+            });
+        };
+
         const sendMessage = async () => {
             const input = document.getElementById('chat-input');
             const message = input.value.trim();
@@ -68,6 +78,9 @@
             }
 
             chatBox.scrollTop = chatBox.scrollHeight;
+
+            // Save chat history
+            await saveChatHistory(message, data.response);
         };
 
         document.getElementById('chat-button').addEventListener('click', sendMessage);

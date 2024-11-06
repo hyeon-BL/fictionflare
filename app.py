@@ -163,6 +163,20 @@ def reset_chat():
 
     return jsonify({'status': 'Chat history cleared', 'first_prompt': first_prompt})
 
+@app.route('/save_chat_history', methods=['POST'])
+def save_chat_history():
+    data = request.get_json()
+    user_message = data.get('user_message')
+    bot_message = data.get('bot_message')
+
+    if not user_message or not bot_message:
+        return jsonify({'error': 'Invalid data provided'}), 400
+
+    # Save the chat history to a file or database with UTF-8 encoding
+    with open('chat_history.txt', 'a', encoding='utf-8') as f:
+        f.write(f"User: {user_message}\nBot: {bot_message}\n\n")
+
+    return jsonify({'status': 'Chat history saved'})
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8000, debug=True)
