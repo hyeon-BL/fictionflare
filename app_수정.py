@@ -1,14 +1,14 @@
-from flask import Flask, render_template, request, jsonify, session
+from flask import Flask, render_template, request, jsonify
 from openai import OpenAI
 import os
 
 app = Flask(__name__)
-app.secret_key = os.urandom(24)
 
 with open('OpenAI.txt', 'r') as f:
     openai_api_key = f.read().strip()
 
 client = OpenAI(api_key=openai_api_key)
+chat_history = []  # Global chat history list
 
 problems = [
     {
@@ -66,18 +66,14 @@ def prompt_generate(problem, answer):
 
 @app.route('/')
 def index():
-    session.pop('chat_history', None)  # 대화 기록 초기화
+    global chat_history
+    chat_history = []  # Reset chat history
 
     problem = next((p for p in problems if p['label'] == "바다거북 스프"), None)
     if not problem:
         return "문제를 찾을 수 없습니다.", 404
 
-    if 'chat_history' not in session:
-        session['chat_history'] = []
-
-    chat_history = session['chat_history']
     first_prompt = prompt_generate(problem['problem'], problem['answer'])
-
     chat_history.append({"role": "user", "content": first_prompt})
 
     response = client.chat.completions.create(
@@ -86,25 +82,20 @@ def index():
     )
 
     reply = str(response.choices[0].message.content)
-
     chat_history.append({"role": "assistant", "content": reply})
 
     return render_template('chat.html', step=problem)
 
 @app.route('/step/<int:step_id>')
 def step(step_id):
-    session.pop('chat_history', None)  # 대화 기록 초기화
+    global chat_history
+    chat_history = []  # Reset chat history
 
     problem = next((p for p in problems if p['id'] == step_id), None)
     if not problem:
         return "문제를 찾을 수 없습니다.", 404
 
-    if 'chat_history' not in session:
-        session['chat_history'] = []
-
-    chat_history = session['chat_history']
     first_prompt = prompt_generate(problem['problem'], problem['answer'])
-
     chat_history.append({"role": "user", "content": first_prompt})
 
     response = client.chat.completions.create(
@@ -113,22 +104,17 @@ def step(step_id):
     )
 
     reply = str(response.choices[0].message.content)
-    
     chat_history.append({"role": "assistant", "content": reply})
 
     return render_template('chat.html', step=problem)
 
 @app.route('/chat', methods=['POST'])
 def chat():
+    global chat_history
     data = request.get_json()
     user_input = data.get('message')
     if not user_input:
         return jsonify({'error': 'No message provided'}), 400
-
-    if 'chat_history' not in session:
-        session['chat_history'] = []
-    
-    chat_history = session['chat_history']
 
     chat_history.append({"role": "user", "content": user_input})
 
@@ -138,18 +124,15 @@ def chat():
     )
 
     reply = str(response.choices[0].message.content)
-
     chat_history.append({"role": "assistant", "content": reply})
-
-    session['chat_history'] = chat_history
 
     if "[클리어]" in reply:
         return jsonify({'response': "[클리어]"})
-    else:
-        return jsonify({'response': reply})
+    return jsonify({'response': reply})
 
 @app.route('/reset_chat', methods=['POST'])
 def reset_chat():
+    global chat_history
     data = request.get_json()
     step_id = data.get('step_id')
     if step_id is None:
@@ -159,16 +142,9 @@ def reset_chat():
     if not problem:
         return jsonify({'error': 'Invalid step_id provided'}), 404
 
-    session.pop('chat_history', None)  # 대화 기록 초기화
-
-    if 'chat_history' not in session:
-        session['chat_history'] = []
-
-    chat_history = session['chat_history']
+    chat_history = []  # Reset chat history
     first_prompt = prompt_generate(problem['problem'], problem['answer'])
-
     chat_history.append({"role": "user", "content": first_prompt})
-    session['chat_history'] = chat_history
 
     return jsonify({'status': 'Chat history cleared', 'first_prompt': first_prompt})
 
