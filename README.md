@@ -34,14 +34,6 @@ We are working on building a demo of our product.
 * **Market Potential:** The demand for interactive entertainment is booming, and FictionFlare offers a unique and compelling experience.
 * **Strong Team:** We are a passionate team of entrepreneurs and AI developers dedicated to pushing the boundaries of storytelling.
 
-## Get Involved
-
-We are actively seeking investors who share our passion for innovation and the future of storytelling. Join us on this exciting journey!
-
-**Contact:** [your contact information]
-
-**Website:** [your website (if available)]
-
 ## Join the Adventure
 
 We are seeking investors who share our vision for the future of interactive storytelling. Contact us to learn more about how you can be a part of this exciting journey.
