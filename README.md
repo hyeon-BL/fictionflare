@@ -11,7 +11,7 @@ Imagine a world where stories come alive through dynamic conversations with AI-p
 3. **Readers Drive the Narrative:** Readers engage in conversations with these AI characters, their choices and questions shaping the story's progression.
 
 We are working on building a demo of our product.
-[Here's a video demo](FictionFlare(2).mp4)
+[![Demo Video](FictionFlare(2).mp4)](FictionFlare(2).mp4)
 
 ## Key Features
 
