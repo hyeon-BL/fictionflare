@@ -13,6 +13,7 @@ Imagine a world where stories come alive through dynamic conversations with AI-p
 We are working on building a demo of our product.
 
 [![Demo Video](FictionFlare(2).mp4)](FictionFlare(2).mp4)
+[![Demo Image](demo.png)](demo.png)
 
 ## Key Features
 
