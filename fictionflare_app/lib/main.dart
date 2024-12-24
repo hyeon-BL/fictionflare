@@ -1,5 +1,6 @@
 import 'package:fictionflare_app/features/landing/screens/landing_screen.dart';
 import 'package:fictionflare_app/firebase_options.dart';
+import 'package:fictionflare_app/router.dart';
 import 'package:flutter/material.dart';
 import 'package:fictionflare_app/colors.dart';
 import 'package:fictionflare_app/screens/mobile_layout_screen.dart';
@@ -25,7 +26,11 @@ class MyApp extends StatelessWidget {
       title: 'FictionFlare',
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: backgroundColor,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: appBarColor,
+        ),
       ),
+      onGenerateRoute: (settings) => generateRoute(settings),
       home: const LandingScreen(),
     );
   }
