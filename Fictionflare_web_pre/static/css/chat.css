@@ -1,0 +1,273 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+}
+
+.content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+    gap: 20px;
+}
+
+.problem {
+    flex: 1;
+}
+
+h1 {
+    margin-bottom: 20px;
+    display: inline-block; /* 텍스트 크기에 맞춰 배경색 */
+}
+
+.instructions {
+    color: #6c757d;
+    margin-bottom: 30px;
+    font-size: 24px;
+    font-weight: bold;
+    font-family: "Do Hyeon", serif;
+    font-style: normal;
+}
+
+.puzzle p {
+    color: #495057;
+    font-size: 13px;
+    line-height: 1.6;
+    text-align: left;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-right: 70px; /* puzzle과 chat-container 사이의 거리 */
+}
+
+.chat-container {
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    border: 1px solid #ccc;
+    border-radius: 15px; /* 둥근 모서리 */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    height: 80vh; /* 고정 높이 설정 */
+}
+
+.chat-box {
+    flex-grow: 1;
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+    overflow-y: auto;
+    max-height: calc(100% - 60px); /* 버튼과 입력 필드 높이를 제외한 최대 높이 설정 */
+    display: flex;
+    flex-direction: column;
+    background-color: #FFFFFF;
+    border-radius: 10px; /* 둥근 모서리 */
+}
+
+.chat-input-container {
+    display: flex;
+    border-top: 1px solid #ccc;
+    padding: 10px;
+    background-color: #fff;
+}
+
+.chat-input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 20px; /* 둥근 모서리 */
+    margin-right: 10px;
+}
+
+.chat-button {
+    padding: 10px 20px;
+    background-color: #6D4F4F;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 20px; /* 둥근 모서리 */
+    font-size: 16px; /* 텍스트 크기 증가 */
+}
+
+.chat-button:hover {
+    background-color: #6D4F4F;
+}
+
+.message {
+    font-family: "Yeon Sung", serif;
+    font-weight: 400;
+    font-style: normal;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 20px; /* 둥근 모서리 */
+    word-wrap: break-word;
+    max-width: 80%;
+    display: inline-block;
+}
+
+.message.user {
+    background-color: #F6F6F6;
+    color: #131313;
+    align-self: flex-end;
+    text-align: right;
+    margin-left: auto;
+    border-radius: 10px; /* 둥근 모서리 */
+}
+
+.message.bot {
+    background-color: #6D4F4F;
+    color: #FFFFFF;
+    align-self: flex-start;
+    text-align: left;
+    margin-right: auto;
+    border-radius: 10px; /* 둥근 모서리 */
+}
+
+.message.typing-indicator {
+    background-color: #F6F6F6;
+    color: #131313;
+    align-self: flex-end;
+    text-align: right;
+    margin-left: auto;
+    border-radius: 10px; /* 둥근 모서리 */
+}
+
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+}
+
+.typing-indicator .wave {
+    display: flex;
+    align-items: center;
+}
+
+.typing-indicator .dot {
+    width: 8px;
+    height: 8px;
+    margin: 0 2px;
+    background-color: #ccc;
+    border-radius: 50%;
+    animation: wave 1.2s linear infinite;
+}
+
+.typing-indicator .dot:nth-child(2) {
+    animation-delay: -1.1s;
+}
+
+.typing-indicator .dot:nth-child(3) {
+    animation-delay: -1s;
+}
+
+@keyframes wave {
+    0%, 60%, 100% {
+        transform: initial;
+    }
+    30% {
+        transform: translateY(-10px);
+    }
+}
+
+.clear-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+    box-sizing: border-box; /* 추가 */
+}
+
+.clear-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    aspect-ratio: 1 / 1; /* 정사각형 비율 유지 */
+}
+
+.clear-content h2 {
+    margin-bottom: 20px;
+}
+
+.clear-content p {
+    margin-bottom: 20px;
+    font-size: 16px;
+    overflow-wrap: break-word; /* 긴 단어가 있을 때 줄바꿈 처리 */
+    word-break: keep-all; /* 단어 단위로 줄바꿈 */
+}
+
+.clear-content a {
+    display: block;
+    padding: 10px 20px;
+    background-color: #6D4F4F;
+    color: white;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.clear-content a:hover {
+    background-color: #45a049;
+}
+
+/* 반응형 디자인을 위한 미디어 쿼리 */
+@media (max-width: 768px) {
+    .content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .container {
+        display: block; /* 모바일에서 flex 비활성화 */
+    }
+
+    .puzzle p {
+        margin-right: 0; /* 모바일에서 margin-right 제거 */
+    }
+
+    .chat-container {
+        width: 100%;
+        height: 70vh; /* Increase the height of chat-container on mobile */
+    }
+
+    .chat-box {
+        height: 60vh; /* Increase the height of chat-box on mobile */
+    }
+
+    .problem h1, .problem p {
+        font-size: 18px; /* 모바일에서 텍스트 크기 조정 */
+        word-break: break-word; /* 텍스트가 잘리지 않도록 */
+        white-space: normal; /* 텍스트 줄바꿈 허용 */
+    }
+}
