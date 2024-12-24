@@ -1,3 +1,4 @@
+import 'package:fictionflare_app/features/landing/screens/landing_screen.dart';
 import 'package:fictionflare_app/firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:fictionflare_app/colors.dart';
@@ -25,10 +26,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: backgroundColor,
       ),
-      home: const ResponsiveLayout(
-        mobileScreenLayout: MobileLayoutScreen(),
-        webScreenLayout: WebLayoutScreen(),
-      ),
+      home: const LandingScreen(),
     );
   }
 }
