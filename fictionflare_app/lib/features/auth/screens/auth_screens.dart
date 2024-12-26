@@ -1,5 +1,5 @@
 import 'package:fictionflare_app/features/auth/screens/login_screens.dart';
-import 'package:fictionflare_app/screens/mobile_layout_screen.dart';
+import 'package:fictionflare_app/screens/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +19,7 @@ class AuthScreens extends StatelessWidget {
 
         // User is logged in
         if (snapshot.hasData) {
-          return MobileLayoutScreen();
+          return HomeScreen();
         }
 
         // User is not logged in
