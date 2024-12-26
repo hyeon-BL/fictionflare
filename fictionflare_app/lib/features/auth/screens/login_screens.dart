@@ -2,6 +2,7 @@ import 'package:fictionflare_app/colors.dart';
 import 'package:fictionflare_app/features/auth/componets/signin_button.dart';
 import 'package:fictionflare_app/features/auth/componets/square_tile.dart';
 import 'package:fictionflare_app/features/auth/componets/textfield.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -14,7 +15,12 @@ class LoginScreen extends StatelessWidget {
   final passwordController = TextEditingController();
 
   // sign user in method
-  void signUserIn() {}
+  void signUserIn() async {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: usernameController.text,
+      password: passwordController.text,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
