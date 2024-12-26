@@ -16,6 +16,44 @@ class LoginScreen extends StatelessWidget {
 
   // sign user in method
   void signUserIn(BuildContext context) async {
+    // show wrong email message
+    void wrongEmailMessage() {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Error'),
+            content: const Text('User not found'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+
+    // show wrong password message
+    void wrongPasswordMessage() {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Error'),
+            content: const Text('Wrong password'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+
     try {
       // Show loading indicator
       showDialog(
@@ -31,23 +69,12 @@ class LoginScreen extends StatelessWidget {
         email: usernameController.text.trim(),
         password: passwordController.text.trim(),
       );
-
-      // Pop loading indicator
-      if (context.mounted) Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
-      // Pop loading indicator
-      Navigator.pop(context);
-
-      // Show error message
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Error'),
-            content: Text(e.message ?? 'An error occurred'),
-          );
-        },
-      );
+      if (e.code == 'user-not-found') {
+        wrongEmailMessage();
+      } else if (e.code == 'wrong-password') {
+        wrongPasswordMessage();
+      }
     }
   }
 

@@ -1,9 +1,15 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fictionflare_app/colors.dart';
 import 'package:fictionflare_app/widgets/contacts_list.dart';
 
 class MobileLayoutScreen extends StatelessWidget {
   const MobileLayoutScreen({super.key});
+
+  void signUserout() {
+    // sign out user
+    FirebaseAuth.instance.signOut();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +21,7 @@ class MobileLayoutScreen extends StatelessWidget {
           backgroundColor: appBarColor,
           centerTitle: false,
           title: const Text(
-            'WhatsApp',
+            'FictionFlare',
             style: TextStyle(
               fontSize: 20,
               color: Colors.grey,
@@ -27,9 +33,24 @@ class MobileLayoutScreen extends StatelessWidget {
               icon: const Icon(Icons.search, color: Colors.grey),
               onPressed: () {},
             ),
-            IconButton(
+            PopupMenuButton<int>(
               icon: const Icon(Icons.more_vert, color: Colors.grey),
-              onPressed: () {},
+              onSelected: (int result) {
+                // Handle the selected option
+              },
+              itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
+                PopupMenuItem<int>(
+                  value: 1,
+                  child: TextButton(
+                      onPressed: signUserout,
+                      child: Text('Sign Out',
+                          style: TextStyle(color: Colors.white))),
+                ),
+                const PopupMenuItem<int>(
+                  value: 2,
+                  child: Text('Option 2'),
+                ),
+              ],
             ),
           ],
           bottom: const TabBar(
