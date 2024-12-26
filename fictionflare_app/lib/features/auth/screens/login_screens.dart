@@ -31,21 +31,14 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(height: 50),
-            const Text('you need to be verified to start',
+            const SizedBox(height: 100),
+            const Text('Enter your email to continue',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: greyColor,
                 )),
-            const SizedBox(height: 20),
-            IntrinsicWidth(
-              child: TextButton(
-                onPressed: () {},
-                child: Text('Pick Country'),
-              ),
-            ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -54,19 +47,32 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: TextField(
                     controller: numberController,
                     decoration: InputDecoration(
-                      hintText: 'Enter your detective number',
+                      hintText: 'Enter your email',
                       hintStyle: const TextStyle(color: greyColor),
                     ),
                   ),
                 ),
                 const SizedBox(width: 10),
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: tabColor,
+                  ),
                   onPressed: () {},
-                  child: const Text('Verify'),
+                  child: const Text('Enter',
+                      style: TextStyle(color: Colors.black)),
                 ),
               ],
             ),
-            SizedBox(height: size.height / 2),
+            SizedBox(
+              height: 40,
+            ),
+            TextButton(
+                style: TextButton.styleFrom(
+                  backgroundColor: Color.fromRGBO(200, 200, 200, 0.8),
+                ),
+                onPressed: () {},
+                child: Text('Join', style: TextStyle(color: Colors.black))),
+            SizedBox(height: size.height / 3),
             SizedBox(
               width: 150,
               child: CustomButton(text: 'Next', onPressed: () {}),
