@@ -5,7 +5,7 @@ import 'package:fictionflare_app/features/auth/screens/login_screens.dart';
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
     case LoginScreen.routeName:
-      return MaterialPageRoute(builder: (_) => const LoginScreen());
+      return MaterialPageRoute(builder: (_) => LoginScreen());
 
     default:
       return MaterialPageRoute(
