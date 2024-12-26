@@ -4,6 +4,8 @@ import 'package:fictionflare_app/info.dart';
 import 'package:fictionflare_app/widgets/chat_list.dart';
 
 class MobileChatScreen extends StatelessWidget {
+  static const routeName = '/main-screen';
+
   const MobileChatScreen({super.key});
 
   @override

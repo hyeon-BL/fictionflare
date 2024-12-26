@@ -4,25 +4,27 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class AuthScreens extends StatelessWidget {
+  static const routeName = '/auth-screens';
   const AuthScreens({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Auth Screens'),
-      ),
-      body: StreamBuilder<User?>(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          // user is logged in
-          if (snapshot.hasData) {
-            return MobileChatScreen();
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        // Show loading indicator while waiting
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
         }
-          // user is not logged in
-          return LoginScreen();
-        },
-      ),
+
+        // User is logged in
+        if (snapshot.hasData) {
+          return const MobileChatScreen();
+        }
+
+        // User is not logged in
+        return LoginScreen();
+      },
     );
   }
 }

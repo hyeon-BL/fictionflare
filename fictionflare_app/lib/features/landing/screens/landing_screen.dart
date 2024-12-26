@@ -1,13 +1,13 @@
 import 'package:fictionflare_app/colors.dart';
 import 'package:fictionflare_app/common/widgets/custom_button.dart';
-import 'package:fictionflare_app/features/auth/screens/login_screens.dart';
+import 'package:fictionflare_app/features/auth/screens/auth_screens.dart';
 import 'package:flutter/material.dart';
 
 class LandingScreen extends StatelessWidget {
   const LandingScreen({super.key});
 
-  void navigateToLoginScreen(BuildContext context) {
-    Navigator.pushNamed(context, LoginScreen.routeName);
+  void navigateToAuthScreen(BuildContext context) {
+    Navigator.pushNamed(context, AuthScreens.routeName);
   }
 
   @override
@@ -39,7 +39,7 @@ class LandingScreen extends StatelessWidget {
               SizedBox(height: 20),
               CustomButton(
                   text: 'Get Started',
-                  onPressed: () => navigateToLoginScreen(context)),
+                  onPressed: () => navigateToAuthScreen(context)),
             ],
           ),
         ),

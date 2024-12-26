@@ -15,11 +15,40 @@ class LoginScreen extends StatelessWidget {
   final passwordController = TextEditingController();
 
   // sign user in method
-  void signUserIn() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: usernameController.text,
-      password: passwordController.text,
-    );
+  void signUserIn(BuildContext context) async {
+    try {
+      // Show loading indicator
+      showDialog(
+        context: context,
+        builder: (context) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      );
+
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: usernameController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+
+      // Pop loading indicator
+      if (context.mounted) Navigator.pop(context);
+    } on FirebaseAuthException catch (e) {
+      // Pop loading indicator
+      Navigator.pop(context);
+
+      // Show error message
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text(e.message ?? 'An error occurred'),
+          );
+        },
+      );
+    }
   }
 
   @override
@@ -91,7 +120,7 @@ class LoginScreen extends StatelessWidget {
 
               // sign in button
               SigninButton(
-                onTap: signUserIn,
+                onTap: () => signUserIn(context),
               ),
 
               const SizedBox(height: 50),
