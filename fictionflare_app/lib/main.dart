@@ -1,22 +1,50 @@
 import 'package:fictionflare_app/features/landing/screens/landing_screen.dart';
 import 'package:fictionflare_app/firebase_options.dart';
+import 'package:fictionflare_app/providers/settings_provider.dart';
 import 'package:fictionflare_app/router.dart';
+import 'package:fictionflare_app/themes/dark_mode.dart';
 import 'package:flutter/material.dart';
-import 'package:fictionflare_app/colors.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:fictionflare_app/providers/chat_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+
+  // Initialize Hive
+  await Hive.initFlutter();
+  await ChatProvider.initHive();
+
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (context) => ChatProvider()),
+    ChangeNotifierProvider(create: (context) => SettingsProvider()),
+  ], child: const MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    setTheme();
+    super.initState();
+  }
+
+  void setTheme() {
+    final settingsProvider = context.read<SettingsProvider>();
+    settingsProvider.getSavedSettings();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,12 +55,9 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'FictionFlare',
-        theme: ThemeData.dark().copyWith(
-          scaffoldBackgroundColor: backgroundColor,
-          appBarTheme: const AppBarTheme(
-            backgroundColor: appBarColor,
-          ),
-        ),
+        theme: context.watch<SettingsProvider>().isDarkMode
+            ? darkTheme
+            : lightTheme,
         onGenerateRoute: (settings) => generateRoute(settings),
         home: const LandingScreen(),
       ),
