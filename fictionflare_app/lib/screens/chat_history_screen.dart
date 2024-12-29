@@ -18,7 +18,7 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
     super.initState();
     Boxes.initializeDefaultChats();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,8 +30,9 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
         body: ValueListenableBuilder<Box<ChatHistory>>(
           valueListenable: Boxes.getChatHistory().listenable(),
           builder: (context, box, _) {
-            final chatHistory =
-                box.values.toList().cast<ChatHistory>().reversed.toList();
+            final chatHistory = box.values.toList().cast<ChatHistory>().toList()
+              ..sort((a, b) =>
+                  b.timestamp.compareTo(a.timestamp)); // Sort by timestamp
             return chatHistory.isEmpty
                 ? const EmptyHistoryWidget()
                 : Padding(

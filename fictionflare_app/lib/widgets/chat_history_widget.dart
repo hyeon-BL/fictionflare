@@ -25,14 +25,26 @@ class ChatHistoryWidget extends StatelessWidget {
         title: Text(
           chat.name,
           maxLines: 1,
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         subtitle: Text(
           chat.response,
           maxLines: 2,
+          overflow: TextOverflow.ellipsis,
         ),
-        trailing: Text(
-          chat.timestamp.toString().split(' ')[0],
-          style: const TextStyle(fontSize: 12),
+        trailing: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text(
+              chat.timestamp.toString().split(' ')[0],
+              style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+            ),
+            Text(
+              chat.timestamp.toString().split(' ')[1].split('.')[0],
+              style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+            ),
+          ],
         ),
         onTap: () async {
           final chatProvider = context.read<ChatProvider>();
