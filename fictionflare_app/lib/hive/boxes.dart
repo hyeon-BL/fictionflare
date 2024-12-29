@@ -29,6 +29,7 @@ class Boxes {
       for (var character in defaultCharacters) {
         final chatId = const Uuid().v4();
         final chat = ChatHistory(
+          name: character['name']!,
           chatId: chatId,
           prompt: character['name']!,
           response: character['greeting']!,

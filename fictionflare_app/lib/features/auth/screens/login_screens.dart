@@ -2,6 +2,7 @@ import 'package:fictionflare_app/colors.dart';
 import 'package:fictionflare_app/features/auth/componets/signin_button.dart';
 import 'package:fictionflare_app/features/auth/componets/square_tile.dart';
 import 'package:fictionflare_app/features/auth/componets/textfield.dart';
+import 'package:fictionflare_app/themes/dark_mode.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -84,7 +85,7 @@ class LoginScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Login'),
       ),
-      backgroundColor: blackColor,
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Center(
           child: Column(

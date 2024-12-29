@@ -376,6 +376,7 @@ class ChatProvider extends ChangeNotifier {
     final chatHistoryBox = Boxes.getChatHistory();
 
     final chatHistory = ChatHistory(
+      name: 'User',
       chatId: chatID,
       prompt: userMessage.message.toString(),
       response: assistantMessage.message.toString(),

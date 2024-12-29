@@ -23,7 +23,7 @@ class ChatHistoryWidget extends StatelessWidget {
           child: Icon(Icons.chat),
         ),
         title: Text(
-          chat.prompt,
+          chat.name,
           maxLines: 1,
         ),
         subtitle: Text(

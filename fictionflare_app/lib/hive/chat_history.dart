@@ -19,6 +19,9 @@ class ChatHistory extends HiveObject {
   @HiveField(4)
   final DateTime timestamp;
 
+  @HiveField(5)  // Make sure to add this annotation
+  final String name;
+
   // constructor
   ChatHistory({
     required this.chatId,
@@ -26,5 +29,6 @@ class ChatHistory extends HiveObject {
     required this.response,
     required this.imagesUrls,
     required this.timestamp,
+    required this.name,  // Add name to constructor
   });
 }
