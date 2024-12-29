@@ -29,7 +29,10 @@ class ChatHistoryWidget extends StatelessWidget {
           chat.response,
           maxLines: 2,
         ),
-        trailing: const Icon(Icons.arrow_forward_ios),
+        trailing: Text(
+          chat.timestamp.toString().split(' ')[0],
+          style: const TextStyle(fontSize: 12),
+        ),
         onTap: () async {
           // navigate to chat screen
           final chatProvider = context.read<ChatProvider>();
