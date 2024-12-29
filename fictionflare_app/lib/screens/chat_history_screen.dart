@@ -14,6 +14,12 @@ class ChatHistoryScreen extends StatefulWidget {
 
 class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
   @override
+  void initState() {
+    super.initState();
+    Boxes.initializeDefaultChats();
+  }
+  
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
