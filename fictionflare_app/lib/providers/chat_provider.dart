@@ -375,8 +375,11 @@ class ChatProvider extends ChangeNotifier {
     // if not create a new one
     final chatHistoryBox = Boxes.getChatHistory();
 
+    // get name from the chat history
+    final character = chatHistoryBox.get(chatID)?.name ?? 'error';
+
     final chatHistory = ChatHistory(
-      name: 'User',
+      name: character,
       chatId: chatID,
       prompt: userMessage.message.toString(),
       response: assistantMessage.message.toString(),
