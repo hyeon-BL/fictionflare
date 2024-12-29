@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:typed_data';
+import 'package:fictionflare_app/api/api_service.dart';
 import 'package:fictionflare_app/constants.dart';
 import 'package:fictionflare_app/hive/boxes.dart';
 import 'package:fictionflare_app/hive/chat_history.dart';
@@ -150,7 +151,7 @@ class ChatProvider extends ChangeNotifier {
   }
 
   String getApiKey() {
-    return "API_KEY";
+    return ApiService.apiKey;
   }
 
   // set current page index
