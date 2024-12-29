@@ -1,5 +1,6 @@
 import 'package:fictionflare_app/hive/chat_history.dart';
 import 'package:fictionflare_app/providers/chat_provider.dart';
+import 'package:fictionflare_app/screens/chat_screen.dart';
 import 'package:fictionflare_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -34,15 +35,20 @@ class ChatHistoryWidget extends StatelessWidget {
           style: const TextStyle(fontSize: 12),
         ),
         onTap: () async {
-          // navigate to chat screen
           final chatProvider = context.read<ChatProvider>();
-          // prepare chat room
           await chatProvider.prepareChatRoom(
             isNewChat: false,
             chatID: chat.chatId,
           );
-          chatProvider.setCurrentIndex(newIndex: 1);
-          chatProvider.pageController.jumpToPage(1);
+          // Add delay to ensure chat room is prepared
+          await Future.delayed(const Duration(milliseconds: 100));
+          if (context.mounted) {
+            // Use Navigator instead of page controller
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => ChatScreen()),
+            );
+          }
         },
         onLongPress: () {
           // show my animated dialog to delete the chat
