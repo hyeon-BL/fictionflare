@@ -17,12 +17,12 @@ class AuthScreens extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
-  
+
         // User is logged in
         if (snapshot.hasData) {
           return HomeScreen();
         }
-  
+
         // User is not logged in
         return FutureBuilder(
           future: Future.delayed(const Duration(seconds: 3)),

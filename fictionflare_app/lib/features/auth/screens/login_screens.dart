@@ -57,6 +57,7 @@ class LoginScreen extends StatelessWidget {
       // Show loading indicator
       showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (context) {
           return const Center(
             child: CircularProgressIndicator(),
@@ -68,7 +69,14 @@ class LoginScreen extends StatelessWidget {
         email: usernameController.text.trim(),
         password: passwordController.text.trim(),
       );
+
+      // Close the loading indicator
+      Navigator.pop(context);
+
     } on FirebaseAuthException catch (e) {
+      // Close the loading indicator
+      Navigator.pop(context);
+
       if (e.code == 'user-not-found') {
         wrongEmailMessage();
       } else if (e.code == 'wrong-password') {
