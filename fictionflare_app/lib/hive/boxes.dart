@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'package:fictionflare_app/constants.dart';
 import 'package:fictionflare_app/hive/chat_history.dart';
 import 'package:fictionflare_app/hive/settings.dart';
 import 'package:fictionflare_app/hive/user_model.dart';
+import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
 
@@ -17,27 +19,31 @@ class Boxes {
   static Box<Settings> getSettings() =>
       Hive.box<Settings>(Constants.settingsBox);
 
-  static const defaultCharacters = [
-    {'name': 'Character 1', 'greeting': 'Hello, I am Character 1'},
-    {'name': 'Character 2', 'greeting': 'Hi there, I am Character 2'},
-    {'name': 'Character 3', 'greeting': 'Greetings, I am Character 3'},
-  ];
-
-  static Future<void> initializeDefaultChats() async {
+  static Future<void> initializeDefaultChats () async {
     final box = getChatHistory();
     if (box.isEmpty) {
-      for (var character in defaultCharacters) {
+      // Load character profile from JSON
+      String jsonString = await rootBundle.loadString('assets/character_profile.json');
+      Map<String, dynamic> characterProfiles = json.decode(jsonString);
+
+      for (var entry in characterProfiles.entries) {
+        final String name = entry.key;
+        final Map<String, dynamic> profile = entry.value;
+        
         final chatId = const Uuid().v4();
         final chat = ChatHistory(
-          name: character['name']!,
+          name: name,
           chatId: chatId,
-          prompt: character['name']!,
-          response: character['greeting']!,
+          prompt: profile['identity'],
+          response: "안녕하세요, 저는 $name입니다.", // Default greeting
           imagesUrls: [],
           timestamp: DateTime.now(),
         );
+        
         await box.put(chatId, chat);
       }
     }
   }
+
+  // ...existing code...
 }
