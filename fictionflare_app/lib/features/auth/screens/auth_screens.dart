@@ -1,3 +1,4 @@
+import 'package:fictionflare_app/features/auth/screens/loading_screen.dart';
 import 'package:fictionflare_app/features/auth/screens/login_screens.dart';
 import 'package:fictionflare_app/screens/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,14 +17,23 @@ class AuthScreens extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
-
+  
         // User is logged in
         if (snapshot.hasData) {
           return HomeScreen();
         }
-
+  
         // User is not logged in
-        return LoginScreen();
+        return FutureBuilder(
+          future: Future.delayed(const Duration(seconds: 3)),
+          builder: (context, AsyncSnapshot<void> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return GameLoadingScreen();
+            } else {
+              return LoginScreen();
+            }
+          },
+        );
       },
     );
   }

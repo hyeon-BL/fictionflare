@@ -4,6 +4,7 @@ import 'package:fictionflare_app/hive/boxes.dart';
 import 'package:fictionflare_app/hive/settings.dart';
 import 'package:fictionflare_app/providers/settings_provider.dart';
 import 'package:fictionflare_app/widgets/settings_tile.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -58,6 +59,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
+  void logOut(BuildContext context) async {
+    await FirebaseAuth.instance.signOut();
+    if (mounted) {
+      Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+
+      // clear the user box
+      final userBox = Boxes.getUser();
+      userBox.clear();
+
+      // clear the settings box
+      final settingsBox = Boxes.getSettings();
+      settingsBox.clear();
+
+      // clear the chat history box
+      final chatHistoryBox = Boxes.getChatHistory();
+      chatHistoryBox.clear();
+    }
+  }
+
   @override
   void initState() {
     getUserData();
@@ -73,10 +93,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           actions: [
             IconButton(
-              icon: const Icon(Icons.check),
-              onPressed: () {
-                // save data
-              },
+              icon: const Icon(Icons.logout_rounded),
+              onPressed: () => logOut(context),
             ),
           ],
         ),
@@ -89,14 +107,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Column(
               children: [
                 Center(
-                  // child: BuildDisplayImage(
-                  //     file: file,
-                  //     userImage: userImage,
-                  //     onPressed: () {
-                  //       // open camera or gallery
-                  //       pickImage();
-                  //     }),
-                ),
+                    // child: BuildDisplayImage(
+                    //     file: file,
+                    //     userImage: userImage,
+                    //     onPressed: () {
+                    //       // open camera or gallery
+                    //       pickImage();
+                    //     }),
+                    ),
 
                 const SizedBox(height: 20.0),
 
