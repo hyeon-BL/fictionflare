@@ -7,7 +7,7 @@ class LandingScreen extends StatelessWidget {
   const LandingScreen({super.key});
 
   void navigateToAuthScreen(BuildContext context) {
-    Navigator.pushNamed(context, AuthScreens.routeName);
+    Navigator.pushReplacementNamed(context, AuthScreens.routeName);
   }
 
   @override

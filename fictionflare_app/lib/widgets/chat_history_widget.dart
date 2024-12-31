@@ -56,7 +56,7 @@ class ChatHistoryWidget extends StatelessWidget {
           await Future.delayed(const Duration(milliseconds: 100));
           if (context.mounted) {
             // Use Navigator instead of page controller
-            Navigator.pushReplacement(
+            Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => ChatScreen()),
             );

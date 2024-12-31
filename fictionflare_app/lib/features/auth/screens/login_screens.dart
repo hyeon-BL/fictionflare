@@ -114,8 +114,9 @@ class LoginScreen extends StatelessWidget {
                 Text(
                   'Welcome to FictionFlare',
                   style: TextStyle(
-                    color: Colors.grey[50],
-                    fontSize: 16,
+                    color: Colors.black,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
 
