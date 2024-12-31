@@ -19,7 +19,7 @@ class AssistantMessageWidget extends StatelessWidget {
             maxWidth: MediaQuery.of(context).size.width * 0.9,
           ),
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surfaceVariant,
+            color: Theme.of(context).colorScheme.surfaceContainerHighest,
             borderRadius: BorderRadius.circular(18),
           ),
           padding: const EdgeInsets.all(15),
