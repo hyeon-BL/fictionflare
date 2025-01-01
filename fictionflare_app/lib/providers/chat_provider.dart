@@ -163,7 +163,7 @@ class ChatProvider extends ChangeNotifier {
       }
 
       // init prompt
-      await initChat(chatID);
+      // await initChat(chatID);
 
       // 3. set the current chat id
       setCurrentChatId(newChatId: chatID);
@@ -180,7 +180,7 @@ class ChatProvider extends ChangeNotifier {
     // retrieve system prompt from Boxes
     final chatData = Boxes.getChatHistory().get(chatID);
     final systemPrompt = chatData?.prompt ?? '';
-    
+
     print(chatID);
     print(systemPrompt);
     try {
@@ -190,7 +190,7 @@ class ChatProvider extends ChangeNotifier {
         '',
         systemMessage: systemPrompt,
       );
-    
+
       final assistantMessage = Message(
         messageId: 'init',
         chatId: chatID,
@@ -199,7 +199,7 @@ class ChatProvider extends ChangeNotifier {
         imagesUrls: [],
         timeSent: DateTime.now(),
       );
-    
+
       _inChatMessages.add(assistantMessage);
     } catch (e) {
       log('error: $e');

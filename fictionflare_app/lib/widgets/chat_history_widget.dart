@@ -58,7 +58,7 @@ class ChatHistoryWidget extends StatelessWidget {
             // Use Navigator instead of page controller
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ChatScreen()),
+              MaterialPageRoute(builder: (context) => ChatScreen(chat: chat)),
             );
           }
         },

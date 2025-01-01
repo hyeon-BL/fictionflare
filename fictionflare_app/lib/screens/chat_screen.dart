@@ -1,3 +1,4 @@
+import 'package:fictionflare_app/hive/chat_history.dart';
 import 'package:fictionflare_app/providers/chat_provider.dart';
 import 'package:fictionflare_app/utils/utils.dart';
 import 'package:fictionflare_app/widgets/bottom_chat_field.dart';
@@ -6,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key});
+  final ChatHistory chat;
+  const ChatScreen({super.key, required this.chat});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -54,7 +56,7 @@ class _ChatScreenState extends State<ChatScreen> {
           appBar: AppBar(
             backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
             centerTitle: true,
-            title: const Text('Chat with Gemini'),
+            title: Text(widget.chat.name),
             actions: [
               if (chatProvider.inChatMessages.isNotEmpty)
                 Padding(
