@@ -71,10 +71,14 @@ class LoginScreen extends StatelessWidget {
       );
 
       // Close the loading indicator
-      Navigator.pop(context);
+      if (context.mounted) {
+        Navigator.pop(context);
+      }
     } on FirebaseAuthException catch (e) {
       // Close the loading indicator
-      Navigator.pop(context);
+      if (context.mounted) {
+        Navigator.pop(context);
+      }
 
       if (e.code == 'user-not-found') {
         wrongEmailMessage();

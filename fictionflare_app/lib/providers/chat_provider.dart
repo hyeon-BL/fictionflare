@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-import 'dart:typed_data';
 import 'package:fictionflare_app/api/api_service.dart';
 import 'package:fictionflare_app/constants.dart';
 import 'package:fictionflare_app/hive/boxes.dart';
@@ -163,14 +162,47 @@ class ChatProvider extends ChangeNotifier {
         _inChatMessages.add(message);
       }
 
+      // init prompt
+      await initChat(chatID);
+
       // 3. set the current chat id
       setCurrentChatId(newChatId: chatID);
     } else {
-      // 1. clear the inChatMessages
       _inChatMessages.clear();
-
-      // 2. set the current chat id
       setCurrentChatId(newChatId: chatID);
+
+      // retrieve system prompt from Boxes
+      await initChat(chatID);
+    }
+  }
+
+  Future<void> initChat(String chatID) async {
+    // retrieve system prompt from Boxes
+    final chatData = Boxes.getChatHistory().get(chatID);
+    final systemPrompt = chatData?.prompt ?? '';
+    
+    print(chatID);
+    print(systemPrompt);
+    try {
+      final apiService = ApiService();
+      // pass systemPrompt to initialize chatting
+      final initialReply = await apiService.generateResponse(
+        '',
+        systemMessage: systemPrompt,
+      );
+    
+      final assistantMessage = Message(
+        messageId: 'init',
+        chatId: chatID,
+        role: Role.assistant,
+        message: StringBuffer(initialReply),
+        imagesUrls: [],
+        timeSent: DateTime.now(),
+      );
+    
+      _inChatMessages.add(assistantMessage);
+    } catch (e) {
+      log('error: $e');
     }
   }
 
@@ -181,7 +213,8 @@ class ChatProvider extends ChangeNotifier {
   }) async {
     setLoading(value: true);
     final chatId = getChatId();
-    final messagesBox = await Hive.openBox('${Constants.chatMessagesBox}$chatId');
+    final messagesBox =
+        await Hive.openBox('${Constants.chatMessagesBox}$chatId');
     final userMessageId = messagesBox.keys.length;
     final assistantMessageId = userMessageId + 1;
 
