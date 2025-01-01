@@ -152,6 +152,7 @@ class ChatProvider extends ChangeNotifier {
     required String chatID,
   }) async {
     if (!isNewChat) {
+      String prompt = '';
       // 1.  load the chat messages from the db
       final chatHistory = await loadMessagesFromDB(chatId: chatID);
 
@@ -160,10 +161,27 @@ class ChatProvider extends ChangeNotifier {
 
       for (var message in chatHistory) {
         _inChatMessages.add(message);
-      }
 
+        // get the last 5 messages
+        if (chatHistory.length < 5) {
+          if (message.role == Role.user) {
+            prompt += 'User question: ${message.message.toString()} \n';
+          } else if (message.role == Role.assistant) {
+            prompt += 'Assistant response: ${message.message.toString()} \n';
+          }
+        } else if (chatHistory
+            .sublist(chatHistory.length - 5)
+            .contains(message)) {
+          if (message.role == Role.user) {
+            prompt += 'User question: ${message.message.toString()} \n';
+          } else if (message.role == Role.assistant) {
+            prompt += 'Assistant response: ${message.message.toString()} \n';
+          }
+        }
+      }
+      print(prompt);
       // init prompt
-      // await initChat(chatID);
+      await initChat(chatID, prompt);
 
       // 3. set the current chat id
       setCurrentChatId(newChatId: chatID);
@@ -172,14 +190,14 @@ class ChatProvider extends ChangeNotifier {
       setCurrentChatId(newChatId: chatID);
 
       // retrieve system prompt from Boxes
-      await initChat(chatID);
+      await initChat(chatID, '');
     }
   }
 
-  Future<void> initChat(String chatID) async {
+  Future<void> initChat(String chatID, String messages) async {
     // retrieve system prompt from Boxes
     final chatData = Boxes.getChatHistory().get(chatID);
-    final systemPrompt = chatData?.prompt ?? '';
+    final systemPrompt = (chatData?.prompt ?? '') + messages;
 
     print(chatID);
     print(systemPrompt);
