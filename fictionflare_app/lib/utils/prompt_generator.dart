@@ -26,6 +26,6 @@ class CharacterPrompts {
   }
   
   static String getPrompt(String name) {
-    return _prompts[name] ?? '';
+    return 'background: ${_prompts[name]}';
   }
 }

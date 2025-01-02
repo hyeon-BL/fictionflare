@@ -153,7 +153,6 @@ class ChatProvider extends ChangeNotifier {
     required String chatID,
   }) async {
     if (!isNewChat) {
-      String prompt = '';
       // 1.  load the chat messages from the db
       final chatHistory = await loadMessagesFromDB(chatId: chatID);
 
@@ -162,27 +161,27 @@ class ChatProvider extends ChangeNotifier {
 
       for (var message in chatHistory) {
         _inChatMessages.add(message);
-
-        // get the last 5 messages
-        if (chatHistory.length < 5) {
-          if (message.role == Role.user) {
-            prompt += 'User question: ${message.message.toString()} \n';
-          } else if (message.role == Role.assistant) {
-            prompt += 'Assistant response: ${message.message.toString()} \n';
-          }
-        } else if (chatHistory
-            .sublist(chatHistory.length - 5)
-            .contains(message)) {
-          if (message.role == Role.user) {
-            prompt += 'User question: ${message.message.toString()} \n';
-          } else if (message.role == Role.assistant) {
-            prompt += 'Assistant response: ${message.message.toString()} \n';
-          }
-        }
       }
-      print(prompt);
-      // init prompt
-      await initChat(chatID, prompt);
+
+      //   // get the last 5 messages
+      //   if (chatHistory.length < 5) {
+      //     if (message.role == Role.user) {
+      //       prompt += 'User question: ${message.message.toString()} \n';
+      //     } else if (message.role == Role.assistant) {
+      //       prompt += 'Assistant response: ${message.message.toString()} \n';
+      //     }
+      //   } else if (chatHistory
+      //       .sublist(chatHistory.length - 5)
+      //       .contains(message)) {
+      //     if (message.role == Role.user) {
+      //       prompt += 'User question: ${message.message.toString()} \n';
+      //     } else if (message.role == Role.assistant) {
+      //       prompt += 'Assistant response: ${message.message.toString()} \n';
+      //     }
+      //   }
+      // }
+      // // init prompt
+      // // await initChat(chatID, prompt);
 
       // 3. set the current chat id
       setCurrentChatId(newChatId: chatID);
@@ -191,40 +190,41 @@ class ChatProvider extends ChangeNotifier {
       setCurrentChatId(newChatId: chatID);
 
       // retrieve system prompt from Boxes
-      await initChat(chatID, '');
+      // await initChat(chatID, '');
     }
   }
 
-  Future<void> initChat(String chatID, String messages) async {
+  Future<String> initPrompt(String chatID, String messages) async {
     // retrieve system prompt from Boxes
+    final chatHistory = await loadMessagesFromDB(chatId: chatID);
     final chatData = Boxes.getChatHistory().get(chatID);
     final character = chatData?.name ?? 'error';
-    final systemPrompt = (CharacterPrompts.getPrompt(character)) + messages;
+    String systemPrompt =
+        '${CharacterPrompts.getPrompt(character)} \n previous messages: \n';
 
-    print(chatData?.name);
-    print(chatID);
-    print(systemPrompt);
-    try {
-      final apiService = ApiService();
-      // pass systemPrompt to initialize chatting
-      final initialReply = await apiService.generateResponse(
-        '',
-        systemMessage: systemPrompt,
-      );
-
-      final assistantMessage = Message(
-        messageId: 'init',
-        chatId: chatID,
-        role: Role.assistant,
-        message: StringBuffer(initialReply),
-        imagesUrls: [],
-        timeSent: DateTime.now(),
-      );
-
-      _inChatMessages.add(assistantMessage);
-    } catch (e) {
-      log('error: $e');
+    // get the last 5 messages
+    for (var message in chatHistory) {
+      if (chatHistory.length < 5) {
+        if (message.role == Role.user) {
+          messages += 'question: ${message.message.toString()} \n';
+        } else if (message.role == Role.assistant) {
+          messages += 'answer: ${message.message.toString()} \n';
+        }
+      } else if (chatHistory
+          .sublist(chatHistory.length - 5)
+          .contains(message)) {
+        if (message.role == Role.user) {
+          messages += 'question: ${message.message.toString()} \n';
+        } else if (message.role == Role.assistant) {
+          messages += 'answer: ${message.message.toString()} \n';
+        }
+      }
     }
+    systemPrompt += 'what you need to answer : $messages';
+
+    print(chatID);
+    print(chatData?.name);
+    return systemPrompt;
   }
 
   // send message to gemini and get the streamed reposnse
@@ -256,8 +256,11 @@ class ChatProvider extends ChangeNotifier {
 
     try {
       // create an ApiService instance and generate the response
+      final prompt = await initPrompt(chatId, message);
       final apiService = ApiService();
-      final result = await apiService.generateResponse(message);
+      final result =
+          await apiService.generateResponse(prompt); // add system message
+      print(prompt);
 
       final assistantMessage = userMessage.copyWith(
         messageId: assistantMessageId.toString(),
