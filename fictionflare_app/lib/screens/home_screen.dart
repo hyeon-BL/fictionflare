@@ -1,7 +1,7 @@
 import 'package:fictionflare_app/providers/chat_provider.dart';
 import 'package:fictionflare_app/screens/chat_history_screen.dart';
 import 'package:fictionflare_app/screens/more_screen.dart';
-import 'package:fictionflare_app/screens/profile_screen.dart';
+import 'package:fictionflare_app/screens/friends_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
