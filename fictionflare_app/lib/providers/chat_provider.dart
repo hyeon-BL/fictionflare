@@ -206,24 +206,22 @@ class ChatProvider extends ChangeNotifier {
     for (var message in chatHistory) {
       if (chatHistory.length < 5) {
         if (message.role == Role.user) {
-          messages += 'question: ${message.message.toString()} \n';
+          systemPrompt += 'question: ${message.message.toString()} \n';
         } else if (message.role == Role.assistant) {
-          messages += 'answer: ${message.message.toString()} \n';
+          systemPrompt += 'answer: ${message.message.toString()} \n';
         }
       } else if (chatHistory
-          .sublist(chatHistory.length - 5)
+          .sublist(chatHistory.length - 10)
           .contains(message)) {
         if (message.role == Role.user) {
-          messages += 'question: ${message.message.toString()} \n';
+          systemPrompt += 'User question: ${message.message.toString()} \n';
         } else if (message.role == Role.assistant) {
-          messages += 'answer: ${message.message.toString()} \n';
+          systemPrompt += 'Assistant answer: ${message.message.toString()} \n';
         }
       }
     }
     systemPrompt += 'what you need to answer : $messages';
 
-    print(chatID);
-    print(chatData?.name);
     return systemPrompt;
   }
 
@@ -260,7 +258,7 @@ class ChatProvider extends ChangeNotifier {
       final apiService = ApiService();
       final result =
           await apiService.generateResponse(prompt); // add system message
-      print(prompt);
+      log(prompt);
 
       final assistantMessage = userMessage.copyWith(
         messageId: assistantMessageId.toString(),
