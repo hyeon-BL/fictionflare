@@ -69,13 +69,14 @@ class _ChatScreenState extends State<ChatScreen> {
                         showMyAnimatedDialog(
                           context: context,
                           title: 'Start New Chat',
-                          content: 'Are you sure you want to start a new chat?',
+                          content:
+                              'Do you want to start a new chat with ${widget.chat.name}?',
                           actionText: 'Yes',
                           onActionPressed: (value) async {
                             if (value) {
                               // prepare chat room
                               await chatProvider.prepareChatRoom(
-                                  isNewChat: true, chatID: '');
+                                  isNewChat: true, chatID: widget.chat.chatId);
                             }
                           },
                         );

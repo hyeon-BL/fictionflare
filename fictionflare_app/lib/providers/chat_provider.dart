@@ -138,13 +138,13 @@ class ChatProvider extends ChangeNotifier {
     // get the current chatId, its its not empty
     // we check if its the same as the chatId
     // if its the same we set it to empty
-    if (currentChatId.isNotEmpty) {
-      if (currentChatId == chatId) {
-        setCurrentChatId(newChatId: '');
-        _inChatMessages.clear();
-        notifyListeners();
-      }
-    }
+    // if (currentChatId.isNotEmpty) {
+    //   if (currentChatId == chatId) {
+    //     setCurrentChatId(newChatId: '');
+    //     _inChatMessages.clear();
+    //     notifyListeners();
+    //   }
+    // }
   }
 
   // prepare chat room
@@ -159,38 +159,17 @@ class ChatProvider extends ChangeNotifier {
       // 2. clear the inChatMessages
       _inChatMessages.clear();
 
+      // 3. add the chat messages to the inChatMessages
       for (var message in chatHistory) {
         _inChatMessages.add(message);
       }
 
-      //   // get the last 5 messages
-      //   if (chatHistory.length < 5) {
-      //     if (message.role == Role.user) {
-      //       prompt += 'User question: ${message.message.toString()} \n';
-      //     } else if (message.role == Role.assistant) {
-      //       prompt += 'Assistant response: ${message.message.toString()} \n';
-      //     }
-      //   } else if (chatHistory
-      //       .sublist(chatHistory.length - 5)
-      //       .contains(message)) {
-      //     if (message.role == Role.user) {
-      //       prompt += 'User question: ${message.message.toString()} \n';
-      //     } else if (message.role == Role.assistant) {
-      //       prompt += 'Assistant response: ${message.message.toString()} \n';
-      //     }
-      //   }
-      // }
-      // // init prompt
-      // // await initChat(chatID, prompt);
-
-      // 3. set the current chat id
+      // 4. set the current chat id
       setCurrentChatId(newChatId: chatID);
     } else {
       _inChatMessages.clear();
+      deletChatMessages(chatId: chatID);
       setCurrentChatId(newChatId: chatID);
-
-      // retrieve system prompt from Boxes
-      // await initChat(chatID, '');
     }
   }
 
