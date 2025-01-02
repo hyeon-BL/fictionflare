@@ -1,5 +1,6 @@
 import 'package:fictionflare_app/providers/chat_provider.dart';
 import 'package:fictionflare_app/screens/chat_history_screen.dart';
+import 'package:fictionflare_app/screens/more_screen.dart';
 import 'package:fictionflare_app/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,9 +15,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   // list of screens
   final List<Widget> _screens = [
-    const ProfileScreen(),
-    // const ChatScreen(),
+    const FriendsScreen(),
     const ChatHistoryScreen(),
+    const MoreScreen(),
   ];
 
   @override
@@ -42,16 +43,16 @@ class _HomeScreenState extends State<HomeScreen> {
               items: const [
                 BottomNavigationBarItem(
                   icon: Icon(Icons.person),
-                  label: 'Profile',
+                  label: 'Friends',
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.chat_bubble_rounded),
                   label: 'Chatting',
                 ),
-                // BottomNavigationBarItem(
-                //   icon: Icon(Icons.chat),
-                //   label: 'Chat',
-                // ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.more_horiz_rounded),
+                  label: 'More',
+                ),
               ],
             ));
       },

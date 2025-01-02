@@ -1,203 +1,72 @@
-import 'dart:developer';
-import 'dart:io';
-import 'package:fictionflare_app/hive/boxes.dart';
-import 'package:fictionflare_app/hive/settings.dart';
-import 'package:fictionflare_app/providers/settings_provider.dart';
-import 'package:fictionflare_app/widgets/settings_tile.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
+import '../widgets/friend_list_item.dart';
 
-class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+class FriendsScreen extends StatefulWidget {
+  const FriendsScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<FriendsScreen> createState() => _FriendsScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
-  File? file;
-  String userImage = '';
-  String userName = 'Dexter';
-  final ImagePicker _picker = ImagePicker();
-
-  // pick an image
-  void pickImage() async {
-    try {
-      final pickedImage = await _picker.pickImage(
-        source: ImageSource.gallery,
-        maxHeight: 800,
-        maxWidth: 800,
-        imageQuality: 95,
-      );
-      if (pickedImage != null) {
-        setState(() {
-          file = File(pickedImage.path);
-        });
-      }
-    } catch (e) {
-      log('error : $e');
-    }
-  }
-
-  // get user data
-  void getUserData() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      // get user data fro box
-      final userBox = Boxes.getUser();
-
-      // check is user data is not empty
-      if (userBox.isNotEmpty) {
-        final user = userBox.getAt(0);
-        setState(() {
-          userImage = user!.name;
-          userName = user.image;
-        });
-      }
-    });
-  }
-
-  void logOut(BuildContext context) async {
-    await FirebaseAuth.instance.signOut();
-    if (mounted) {
-      Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
-
-      // clear the user box
-      final userBox = Boxes.getUser();
-      userBox.clear();
-
-      // clear the settings box
-      final settingsBox = Boxes.getSettings();
-      settingsBox.clear();
-
-      // clear the chat history box
-      final chatHistoryBox = Boxes.getChatHistory();
-      chatHistoryBox.clear();
-    }
-  }
-
-  @override
-  void initState() {
-    getUserData();
-    super.initState();
-  }
-
+class _FriendsScreenState extends State<FriendsScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Profile'),
-          centerTitle: true,
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.logout_rounded),
-              onPressed: () => logOut(context),
-            ),
-          ],
-        ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20.0,
-            vertical: 20.0,
+      appBar: AppBar(
+        title: const Text('Contacts'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.person_add),
+            onPressed: () {
+              // TODO: Implement add friend functionality
+            },
           ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Center(
-                    // child: BuildDisplayImage(
-                    //     file: file,
-                    //     userImage: userImage,
-                    //     onPressed: () {
-                    //       // open camera or gallery
-                    //       pickImage();
-                    //     }),
-                    ),
-
-                const SizedBox(height: 20.0),
-
-                // user name
-                Text(userName, style: Theme.of(context).textTheme.titleLarge),
-
-                const SizedBox(height: 40.0),
-
-                ValueListenableBuilder<Box<Settings>>(
-                    valueListenable: Boxes.getSettings().listenable(),
-                    builder: (context, box, child) {
-                      if (box.isEmpty) {
-                        return Column(
-                          children: [
-                            // ai voice
-                            SettingsTile(
-                                icon: Icons.mic,
-                                title: 'Enable AI voice',
-                                value: false,
-                                onChanged: (value) {
-                                  final settingProvider =
-                                      context.read<SettingsProvider>();
-                                  settingProvider.toggleSpeak(
-                                    value: value,
-                                  );
-                                }),
-
-                            const SizedBox(height: 10.0),
-
-                            // theme
-                            SettingsTile(
-                                icon: Icons.light_mode,
-                                title: 'Theme',
-                                value: false,
-                                onChanged: (value) {
-                                  final settingProvider =
-                                      context.read<SettingsProvider>();
-                                  settingProvider.toggleDarkMode(
-                                    value: value,
-                                  );
-                                }),
-                          ],
-                        );
-                      } else {
-                        final settings = box.getAt(0);
-                        return Column(
-                          children: [
-                            // ai voice
-                            SettingsTile(
-                                icon: Icons.mic,
-                                title: 'Enable AI voice',
-                                value: settings!.shouldSpeak,
-                                onChanged: (value) {
-                                  final settingProvider =
-                                      context.read<SettingsProvider>();
-                                  settingProvider.toggleSpeak(
-                                    value: value,
-                                  );
-                                }),
-
-                            const SizedBox(height: 10.0),
-
-                            // theme
-                            SettingsTile(
-                                icon: settings.isDarkTheme
-                                    ? Icons.dark_mode
-                                    : Icons.light_mode,
-                                title: 'Theme',
-                                value: settings.isDarkTheme,
-                                onChanged: (value) {
-                                  final settingProvider =
-                                      context.read<SettingsProvider>();
-                                  settingProvider.toggleDarkMode(
-                                    value: value,
-                                  );
-                                }),
-                          ],
-                        );
-                      }
-                    })
-              ],
+        ],
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: 'Search',
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+              ),
+              onChanged: (value) {
+                // TODO: Implement search functionality
+                setState(() {});
+              },
             ),
           ),
-        ));
+          Expanded(
+            child: ListView.builder(
+              itemCount: 10, // Replace with actual friend count
+              itemBuilder: (context, index) {
+                return const FriendListItem(
+                  name: "John Doe",
+                  username: "@johndoe",
+                  lastSeen: "last seen recently",
+                  isOnline: true,
+                  profileImage: "https://via.placeholder.com/150",
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 }
