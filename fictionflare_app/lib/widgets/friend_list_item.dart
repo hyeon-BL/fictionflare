@@ -1,19 +1,19 @@
+import 'package:fictionflare_app/hive/chat_history.dart';
+import 'package:fictionflare_app/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
 
 class FriendListItem extends StatelessWidget {
   final String name;
-  final String username;
-  final String lastSeen;
+  final String lastChat;
   final bool isOnline;
-  final String profileImage;
+  final ChatHistory chat;
 
   const FriendListItem({
     super.key,
     required this.name,
-    required this.username,
-    required this.lastSeen,
+    required this.lastChat,
     required this.isOnline,
-    required this.profileImage,
+    required this.chat,
   });
 
   @override
@@ -25,7 +25,7 @@ class FriendListItem extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 30,
-              backgroundImage: NetworkImage(profileImage),
+              backgroundImage: AssetImage('assets/default_profile.png'),
             ),
             if (isOnline)
               Positioned(
@@ -50,24 +50,18 @@ class FriendListItem extends StatelessWidget {
           name,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(username),
-            Text(
-              lastSeen,
-              style: TextStyle(
-                color: Colors.grey[600],
-                fontSize: 12,
-              ),
-            ),
-          ],
+        subtitle: Text(
+          lastChat,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
         onTap: () {
-          // TODO: Implement friend profile view or chat initiation
-        },
-        onLongPress: () {
-          // TODO: Implement additional options menu
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ChatScreen(chat: chat),
+            ),
+          );
         },
       ),
     );

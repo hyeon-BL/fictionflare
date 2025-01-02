@@ -1,3 +1,4 @@
+import 'package:fictionflare_app/hive/boxes.dart';
 import 'package:fictionflare_app/widgets/profile_card.dart';
 import 'package:flutter/material.dart';
 import '../widgets/friend_list_item.dart';
@@ -12,6 +13,9 @@ class FriendsScreen extends StatefulWidget {
 class _FriendsScreenState extends State<FriendsScreen> {
   @override
   Widget build(BuildContext context) {
+    final chatHistoryBox = Boxes.getChatHistory();
+    final characters = chatHistoryBox.values.toList();
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
@@ -34,14 +38,14 @@ class _FriendsScreenState extends State<FriendsScreen> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: ListView.builder(
-                itemCount: 10, // Replace with actual friend count
+                itemCount: characters.length,
                 itemBuilder: (context, index) {
-                  return const FriendListItem(
-                    name: "John Doe",
-                    username: "@johndoe",
-                    lastSeen: "last seen recently",
+                  final chat = characters[index];
+                  return FriendListItem(
+                    name: chat.name,
+                    lastChat: chat.response,
                     isOnline: true,
-                    profileImage: "https://via.placeholder.com/150",
+                    chat: chat,
                   );
                 },
               ),
