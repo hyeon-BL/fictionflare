@@ -7,6 +7,7 @@ import 'package:fictionflare_app/hive/chat_history.dart';
 import 'package:fictionflare_app/hive/settings.dart';
 import 'package:fictionflare_app/hive/user_model.dart';
 import 'package:fictionflare_app/models/message.dart';
+import 'package:fictionflare_app/utils/prompt_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -197,8 +198,10 @@ class ChatProvider extends ChangeNotifier {
   Future<void> initChat(String chatID, String messages) async {
     // retrieve system prompt from Boxes
     final chatData = Boxes.getChatHistory().get(chatID);
-    final systemPrompt = (chatData?.prompt ?? '') + messages;
+    final character = chatData?.name ?? 'error';
+    final systemPrompt = (CharacterPrompts.getPrompt(character)) + messages;
 
+    print(chatData?.name);
     print(chatID);
     print(systemPrompt);
     try {

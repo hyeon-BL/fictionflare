@@ -31,22 +31,23 @@ class Boxes {
       for (var entry in characterProfiles.entries) {
         final String name = entry.key;
         final Map<String, dynamic> profile = entry.value;
-        
+
         // Make sure these fields exist in your JSON
         final identity = profile['identity'] ?? '';
         final knowledge = profile['knowledge'] ?? '';
         final example = profile['example'] ?? '';
 
         final prompt = PromptGenerator(
-            profile: identity,
-            knowledge: knowledge,
-            example: example);
+            profile: identity, knowledge: knowledge, example: example);
+
+        final generatedPrompt = prompt.generatePromptForCharacter(name);
+        CharacterPrompts.setPrompt(name, generatedPrompt);
 
         final chatId = const Uuid().v4();
         final chat = ChatHistory(
           name: name,
           chatId: chatId,
-          prompt: prompt.generatePrompt(),
+          prompt: generatedPrompt,
           response: "안녕하세요, 저는 $name입니다.", // Default greeting
           imagesUrls: [],
           timestamp: DateTime.now(),

@@ -50,7 +50,7 @@ dependencies:
   build_runner: ^2.4.14
   image_picker: ^1.1.2
   flutter_markdown: ^0.7.4+3
-  flutter_gemini: ^3.0.0
+  # flutter_gemini: ^3.0.0
   dotenv: ^4.2.0
   http: ^1.2.2
 
