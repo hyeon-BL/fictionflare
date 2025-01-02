@@ -13,30 +13,36 @@ class MyMessageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.centerRight,
-      child: Container(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Container(
           constraints: BoxConstraints(
             maxWidth: MediaQuery.of(context).size.width * 0.7,
           ),
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primaryContainer,
-            borderRadius: BorderRadius.circular(18),
+            color: Color.fromARGB(255, 203, 191, 248),
+            borderRadius: BorderRadius.circular(12),
           ),
-          padding: const EdgeInsets.all(15),
-          margin: const EdgeInsets.only(bottom: 8),
+          padding: EdgeInsets.all(12),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (message.imagesUrls.isNotEmpty)
-                PreviewImagesWidget(
-                  message: message,
-                ),
+                PreviewImagesWidget(message: message),
               MarkdownBody(
                 selectable: true,
                 data: message.message.toString(),
               ),
             ],
-          )),
+          ),
+        ),
+        SizedBox(height: 4),
+        Text(
+          '${message.timeSent.hour}:${message.timeSent.minute.toString().padLeft(2, '0')}',
+          style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+        ),
+      ],
     );
   }
 }

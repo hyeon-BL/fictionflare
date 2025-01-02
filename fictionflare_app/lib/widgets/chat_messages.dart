@@ -24,7 +24,10 @@ class ChatMessages extends StatelessWidget {
         final message = chatProvider.inChatMessages[index];
         return message.role.name == Role.user.name
             ? MyMessageWidget(message: message)
-            : AssistantMessageWidget(message: message.message.toString());
+            : AssistantMessageWidget(
+                message: message.message.toString(),
+                timestamp: message.timeSent,
+              );
       },
     );
   }

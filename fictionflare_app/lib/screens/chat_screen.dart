@@ -93,8 +93,32 @@ class _ChatScreenState extends State<ChatScreen> {
                 children: [
                   Expanded(
                     child: chatProvider.inChatMessages.isEmpty
-                        ? const Center(
-                            child: Text('No messages yet'),
+                        ? Center(
+                            child: Column(
+                              children: [
+                                CircleAvatar(
+                                  backgroundImage:
+                                      AssetImage('assets/default_profile.png'),
+                                  radius: 30,
+                                ),
+                                SizedBox(height: 8),
+                                Text(
+                                  widget.chat.name,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                SizedBox(height: 4),
+                                Text(
+                                  '대화를 시작해보세요',
+                                  style: TextStyle(
+                                    color: Colors.grey[600],
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                            ),
                           )
                         : ChatMessages(
                             scrollController: _scrollController,

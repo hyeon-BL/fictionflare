@@ -179,11 +179,11 @@ class ChatProvider extends ChangeNotifier {
     final chatData = Boxes.getChatHistory().get(chatID);
     final character = chatData?.name ?? 'error';
     String systemPrompt =
-        '${CharacterPrompts.getPrompt(character)} \n previous messages: \n';
+        '${CharacterPrompts.getPrompt(character)} \n previous messages(you don\'t need to repeat same answer.): \n';
 
-    // get the last 5 messages
+    // get the last 10 messages
     for (var message in chatHistory) {
-      if (chatHistory.length < 5) {
+      if (chatHistory.length < 10) {
         if (message.role == Role.user) {
           systemPrompt += 'question: ${message.message.toString()} \n';
         } else if (message.role == Role.assistant) {
