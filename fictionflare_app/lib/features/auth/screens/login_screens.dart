@@ -4,65 +4,46 @@ import 'package:fictionflare_app/features/auth/componets/textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   static const routeName = '/login-screen';
 
-  LoginScreen({super.key});
+  const LoginScreen({super.key});
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   // text editing controllers
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
 
   // sign user in method
-  void signUserIn(BuildContext context) async {
-    // show wrong email message
-    void wrongEmailMessage() {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text('Error'),
-            content: const Text('User not found'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
-    }
+  void _showErrorDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext dialogContext) => AlertDialog(
+        title: const Text('Error'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
 
-    // show wrong password message
-    void wrongPasswordMessage() {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text('Error'),
-            content: const Text('Wrong password'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
-    }
-
+  Future<void> signUserIn(BuildContext context) async {
     try {
-      // Show loading indicator
       showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (context) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
+        builder: (BuildContext dialogContext) => const Center(
+          child: CircularProgressIndicator(),
+        ),
       );
 
       await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -70,20 +51,18 @@ class LoginScreen extends StatelessWidget {
         password: passwordController.text.trim(),
       );
 
-      // Close the loading indicator
-      if (context.mounted) {
-        Navigator.pop(context);
-      }
+      if (context.mounted) Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
-      // Close the loading indicator
       if (context.mounted) {
-        Navigator.pop(context);
-      }
+        Navigator.pop(context); // Close loading
 
-      if (e.code == 'user-not-found') {
-        wrongEmailMessage();
-      } else if (e.code == 'wrong-password') {
-        wrongPasswordMessage();
+        if (e.code == 'invalid-email') {
+          _showErrorDialog(context, 'User not found');
+        } else if (e.code == 'invalid-credential') {
+          _showErrorDialog(context, 'Wrong password');
+        } else {
+          _showErrorDialog(context, 'An error occurred');
+        }
       }
     }
   }
