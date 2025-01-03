@@ -18,7 +18,7 @@ class ProfileScreen extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(CharacterPrompts.getPrompt(name)),
+                image: AssetImage(CharacterImage.getBackgroundImage(name)),
                 fit: BoxFit.cover,
               ),
             ),
@@ -49,8 +49,8 @@ class ProfileScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(color: Colors.white, width: 3),
-                      image: const DecorationImage(
-                        image: AssetImage('assets/default_profile.png'),
+                      image: DecorationImage(
+                        image: AssetImage(CharacterImage.getProfileImage(name)),
                         fit: BoxFit.cover,
                       ),
                     ),

@@ -65,3 +65,28 @@ class CharacterPrompts {
     return 'background: ${_prompts[name]}';
   }
 }
+
+class CharacterImage {
+  static final Map<String, String> _profileimages = {
+    '김진욱(경찰대 32기)': 'assets/profile/jinukkim_profile.png',
+    '김현정': 'assets/profile/hyunjungkim_profile.png',
+    '이태수': 'assets/profile/taesulee_profile.png',
+    '신혁수': 'assets/profile/hyuksushin_profile.png',
+  };
+
+  static final Map<String, String> _backgroundimages = {
+    '김진욱(경찰대 32기)': 'assets/background/jinukkim_background.png',
+    '김현정': 'assets/background/hyunjungkim_background.png',
+    '이태수': 'assets/background/taesulee_background.png',
+    '신혁수': 'assets/background/hyuksushin_background.png',
+  };
+
+  static String getProfileImage(String name) {
+    return _profileimages[name] ?? 'assets/profile/default_profile.png';
+  }
+
+  static String getBackgroundImage(String name) {
+    return _backgroundimages[name] ??
+        'assets/background/default_background.png';
+  }
+}

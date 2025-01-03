@@ -1,5 +1,6 @@
 import 'package:fictionflare_app/hive/chat_history.dart';
 import 'package:fictionflare_app/screens/profile_screen.dart';
+import 'package:fictionflare_app/utils/prompt_generator.dart';
 import 'package:flutter/material.dart';
 
 class FriendListItem extends StatelessWidget {
@@ -27,7 +28,7 @@ class FriendListItem extends StatelessWidget {
               tag: 'profile-$name',
               child: CircleAvatar(
                 radius: 30,
-                backgroundImage: AssetImage('assets/default_profile.png'),
+                backgroundImage: AssetImage(CharacterImage.getProfileImage(name)),
               ),
             ),
             if (isOnline)

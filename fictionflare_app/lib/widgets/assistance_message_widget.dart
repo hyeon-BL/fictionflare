@@ -1,3 +1,4 @@
+import 'package:fictionflare_app/utils/prompt_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -7,10 +8,12 @@ class AssistantMessageWidget extends StatelessWidget {
     super.key,
     required this.message,
     required this.timestamp,
+    required this.name,
   });
 
   final String message;
   final DateTime timestamp;
+  final String name;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +21,7 @@ class AssistantMessageWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CircleAvatar(
-          backgroundImage: AssetImage('assets/default_profile.png'),
+          backgroundImage: AssetImage(CharacterImage.getProfileImage(name)),
           radius: 16,
         ),
         SizedBox(width: 8),

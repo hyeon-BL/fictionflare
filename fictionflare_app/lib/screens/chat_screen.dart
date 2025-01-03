@@ -1,5 +1,6 @@
 import 'package:fictionflare_app/hive/chat_history.dart';
 import 'package:fictionflare_app/providers/chat_provider.dart';
+import 'package:fictionflare_app/utils/prompt_generator.dart';
 import 'package:fictionflare_app/utils/utils.dart';
 import 'package:fictionflare_app/widgets/bottom_chat_field.dart';
 import 'package:fictionflare_app/widgets/chat_messages.dart';
@@ -97,8 +98,9 @@ class _ChatScreenState extends State<ChatScreen> {
                             child: Column(
                               children: [
                                 CircleAvatar(
-                                  backgroundImage:
-                                      AssetImage('assets/default_profile.png'),
+                                  backgroundImage: AssetImage(
+                                      CharacterImage.getProfileImage(
+                                          widget.chat.name)),
                                   radius: 30,
                                 ),
                                 SizedBox(height: 8),
