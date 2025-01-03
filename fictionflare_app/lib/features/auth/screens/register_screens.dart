@@ -1,23 +1,24 @@
 import 'package:fictionflare_app/features/auth/componets/sign_button.dart';
 import 'package:fictionflare_app/features/auth/componets/square_tile.dart';
 import 'package:fictionflare_app/features/auth/componets/textfield.dart';
-import 'package:fictionflare_app/features/auth/screens/register_screens.dart';
+import 'package:fictionflare_app/features/auth/screens/login_screens.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatefulWidget {
-  static const routeName = '/login-screen';
+class RegisterScreens extends StatefulWidget {
+  static const routeName = '/register-screen';
 
-  const LoginScreen({super.key});
+  const RegisterScreens({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreens> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreens> {
   // text editing controllers
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
 
   // sign user in method
   void _showErrorDialog(BuildContext context, String message) {
@@ -37,7 +38,13 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Future<void> signUserIn(BuildContext context) async {
+  Future<void> signUserup(BuildContext context) async {
+    // Validate passwords match
+    if (passwordController.text != confirmPasswordController.text) {
+      _showErrorDialog(context, 'Passwords do not match');
+      return;
+    }
+
     try {
       showDialog(
         context: context,
@@ -47,7 +54,8 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       );
 
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      // try creating a new user
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: usernameController.text.trim(),
         password: passwordController.text.trim(),
       );
@@ -57,12 +65,14 @@ class _LoginScreenState extends State<LoginScreen> {
       if (context.mounted) {
         Navigator.pop(context); // Close loading
 
-        if (e.code == 'invalid-email') {
-          _showErrorDialog(context, 'User not found');
-        } else if (e.code == 'invalid-credential') {
-          _showErrorDialog(context, 'Wrong password');
+        if (e.code == 'weak-password') {
+          _showErrorDialog(context, 'The password provided is too weak');
+        } else if (e.code == 'email-already-in-use') {
+          _showErrorDialog(context, 'An account already exists for that email');
+        } else if (e.code == 'invalid-email') {
+          _showErrorDialog(context, 'Invalid email format');
         } else {
-          _showErrorDialog(context, 'An error occurred');
+          _showErrorDialog(context, 'An error occurred: ${e.message}');
         }
       }
     }
@@ -72,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login'),
+        title: const Text('Sign Up'),
       ),
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -84,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 50),
+                const SizedBox(height: 40),
 
                 // logo
                 const Icon(
@@ -92,7 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   size: 100,
                 ),
 
-                const SizedBox(height: 50),
+                const SizedBox(height: 25),
 
                 // welcome back, you've been missed!
                 Text(
@@ -109,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 // username textfield
                 SignInField(
                   controller: usernameController,
-                  hintText: 'Username',
+                  hintText: 'Email',
                   obscureText: false,
                 ),
 
@@ -122,28 +132,19 @@ class _LoginScreenState extends State<LoginScreen> {
                   obscureText: true,
                 ),
 
-                const SizedBox(height: 10),
-
-                // forgot password?
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        'Forgot Password?',
-                        style: TextStyle(color: Colors.grey[150]),
-                      ),
-                    ],
-                  ),
+                // confirm password textfield
+                SignInField(
+                  controller: confirmPasswordController,
+                  hintText: 'Confirm Password',
+                  obscureText: true,
                 ),
 
-                const SizedBox(height: 25),
+                const SizedBox(height: 35),
 
-                // sign in button
+                // sign up button
                 SigninButton(
-                  onTap: () => signUserIn(context),
-                  text: 'Sign In',
+                  onTap: () => signUserup(context),
+                  text: 'Sign Up',
                 ),
 
                 const SizedBox(height: 50),
@@ -194,24 +195,24 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 const SizedBox(height: 50),
 
-                // not a member? register now
+                // already a member?
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Not a member?',
+                      'Already a member?',
                       style: TextStyle(color: Colors.grey[150]),
                     ),
                     const SizedBox(width: 4),
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (context) {
-                          return RegisterScreens();
-                        }));
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LoginScreen()));
                       },
                       child: const Text(
-                        'Register now',
+                        'Login now',
                         style: TextStyle(
                           color: Colors.blue,
                           fontWeight: FontWeight.bold,
