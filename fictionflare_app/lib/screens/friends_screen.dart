@@ -1,5 +1,6 @@
 import 'package:fictionflare_app/hive/boxes.dart';
 import 'package:fictionflare_app/widgets/profile_card.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../widgets/friend_list_item.dart';
 
@@ -15,6 +16,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
   Widget build(BuildContext context) {
     final chatHistoryBox = Boxes.getChatHistory();
     final characters = chatHistoryBox.values.toList();
+    final user = FirebaseAuth.instance.currentUser;
 
     return Scaffold(
       appBar: AppBar(
@@ -25,9 +27,9 @@ class _FriendsScreenState extends State<FriendsScreen> {
       body: Column(
         children: [
           // my profile
-          const ProfileCard(
+          ProfileCard(
             name: "Your Name",
-            username: "@yourusername",
+            username: user?.email ?? "No email",
             profileImage: "https://via.placeholder.com/150",
             bio: "This is my bio description",
           ),
