@@ -1,7 +1,9 @@
 import 'package:fictionflare_app/hive/chat_history.dart';
 import 'package:fictionflare_app/providers/chat_provider.dart';
 import 'package:fictionflare_app/screens/chat_screen.dart';
+import 'package:fictionflare_app/utils/prompt_generator.dart';
 import 'package:fictionflare_app/utils/utils.dart';
+import 'package:fictionflare_app/widgets/time_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,12 +17,13 @@ class ChatHistoryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final name = chat.name;
     return Card(
       child: ListTile(
-        contentPadding: const EdgeInsets.only(left: 10.0, right: 10.0),
-        leading: const CircleAvatar(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        leading: CircleAvatar(
           radius: 30,
-          child: Icon(Icons.chat),
+          backgroundImage: AssetImage(CharacterImage.getProfileImage(name)),
         ),
         title: Text(
           chat.name,
@@ -34,16 +37,8 @@ class ChatHistoryWidget extends StatelessWidget {
         ),
         trailing: Column(
           mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Text(
-              chat.timestamp.toString().split(' ')[0],
-              style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-            ),
-            Text(
-              chat.timestamp.toString().split(' ')[1].split('.')[0],
-              style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-            ),
+            TimeWidget(timestamp: chat.timestamp),
           ],
         ),
         onTap: () async {
