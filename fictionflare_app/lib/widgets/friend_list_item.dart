@@ -1,5 +1,5 @@
 import 'package:fictionflare_app/hive/chat_history.dart';
-import 'package:fictionflare_app/screens/chat_screen.dart';
+import 'package:fictionflare_app/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 
 class FriendListItem extends StatelessWidget {
@@ -23,9 +23,12 @@ class FriendListItem extends StatelessWidget {
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         leading: Stack(
           children: [
-            CircleAvatar(
-              radius: 30,
-              backgroundImage: AssetImage('assets/default_profile.png'),
+            Hero(
+              tag: 'profile-$name',
+              child: CircleAvatar(
+                radius: 30,
+                backgroundImage: AssetImage('assets/default_profile.png'),
+              ),
             ),
             if (isOnline)
               Positioned(
@@ -59,7 +62,7 @@ class FriendListItem extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ChatScreen(chat: chat),
+              builder: (context) => ProfileScreen(name: name),
             ),
           );
         },
