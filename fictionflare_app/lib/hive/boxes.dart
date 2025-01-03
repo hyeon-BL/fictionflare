@@ -22,27 +22,27 @@ class Boxes {
 
   static Future<void> initializeDefaultChats() async {
     final box = getChatHistory();
-    // Load character profile from JSON
-    String jsonString =
-        await rootBundle.loadString('assets/character_profile.json');
-    Map<String, dynamic> characterProfiles = json.decode(jsonString);
+    if (box.isEmpty) {
+      // Load character profile from JSON
+      String jsonString =
+          await rootBundle.loadString('assets/character_profile.json');
+      Map<String, dynamic> characterProfiles = json.decode(jsonString);
 
-    for (var entry in characterProfiles.entries) {
-      final String name = entry.key;
-      final Map<String, dynamic> profile = entry.value;
+      for (var entry in characterProfiles.entries) {
+        final String name = entry.key;
+        final Map<String, dynamic> profile = entry.value;
 
-      // Make sure these fields exist in your JSON
-      final identity = profile['identity'] ?? '';
-      final knowledge = profile['knowledge'] ?? '';
-      final example = profile['example'] ?? '';
+        // Make sure these fields exist in your JSON
+        final identity = profile['identity'] ?? '';
+        final knowledge = profile['knowledge'] ?? '';
+        final example = profile['example'] ?? '';
 
-      final prompt = PromptGenerator(
-          profile: identity, knowledge: knowledge, example: example);
+        final prompt = PromptGenerator(
+            profile: identity, knowledge: knowledge, example: example);
 
-      final generatedPrompt = prompt.generatePromptForCharacter(name);
-      CharacterPrompts.setPrompt(name, generatedPrompt);
+        final generatedPrompt = prompt.generatePromptForCharacter(name);
+        CharacterPrompts.setPrompt(name, generatedPrompt);
 
-      if (box.isEmpty) {
         final chatId = const Uuid().v4();
         final chat = ChatHistory(
           name: name,
@@ -54,6 +54,28 @@ class Boxes {
         );
 
         await box.put(chatId, chat);
+      }
+    } else {
+      // initialize the CharacterPrompts
+      // Load character profile from JSON
+      String jsonString =
+          await rootBundle.loadString('assets/character_profile.json');
+      Map<String, dynamic> characterProfiles = json.decode(jsonString);
+
+      for (var entry in characterProfiles.entries) {
+        final String name = entry.key;
+        final Map<String, dynamic> profile = entry.value;
+
+        // Make sure these fields exist in your JSON
+        final identity = profile['identity'] ?? '';
+        final knowledge = profile['knowledge'] ?? '';
+        final example = profile['example'] ?? '';
+
+        final prompt = PromptGenerator(
+            profile: identity, knowledge: knowledge, example: example);
+
+        final generatedPrompt = prompt.generatePromptForCharacter(name);
+        CharacterPrompts.setPrompt(name, generatedPrompt);
       }
     }
   }
