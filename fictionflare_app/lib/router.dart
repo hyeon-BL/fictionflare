@@ -1,4 +1,4 @@
-import 'package:fictionflare_app/common/widgets/error.dart';
+import 'package:fictionflare_app/features/widgets/error.dart';
 import 'package:fictionflare_app/features/auth/screens/auth_screens.dart';
 import 'package:flutter/material.dart';
 

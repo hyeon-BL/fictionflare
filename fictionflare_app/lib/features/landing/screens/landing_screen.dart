@@ -1,5 +1,5 @@
 import 'package:fictionflare_app/colors.dart';
-import 'package:fictionflare_app/common/widgets/custom_button.dart';
+import 'package:fictionflare_app/features/widgets/custom_button.dart';
 import 'package:fictionflare_app/features/auth/screens/auth_screens.dart';
 import 'package:flutter/material.dart';
 
