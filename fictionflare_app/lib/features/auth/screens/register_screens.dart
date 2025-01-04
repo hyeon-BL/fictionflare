@@ -1,6 +1,7 @@
 import 'package:fictionflare_app/features/auth/componets/sign_button.dart';
 import 'package:fictionflare_app/features/auth/componets/square_tile.dart';
 import 'package:fictionflare_app/features/auth/componets/textfield.dart';
+import 'package:fictionflare_app/features/auth/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -182,14 +183,14 @@ class _RegisterScreenState extends State<RegisterScreens> {
                 // google + apple sign in buttons
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
+                  children: [
                     // google button
-                    SquareTile(imagePath: 'assets/google.png'),
+                    SquareTile(imagePath: 'assets/google.png', onTap: AuthService().signInWithGoogle),
 
                     SizedBox(width: 25),
 
                     // apple button
-                    SquareTile(imagePath: 'assets/apple.png')
+                    SquareTile(imagePath: 'assets/apple.png', onTap: AuthService().signInWithApple),
                   ],
                 ),
 
