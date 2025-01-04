@@ -38,7 +38,7 @@ dependencies:
   firebase_auth: ^5.3.4
   cloud_firestore: ^5.6.0
   firebase_storage: ^12.3.7
-  firebase_dynamic_links: ^6.0.11
+  # firebase_dynamic_links: ^6.0.11
   google_generative_ai: ^0.4.6
   uuid: ^4.5.1
   provider: ^6.1.2
@@ -53,6 +53,8 @@ dependencies:
   # flutter_gemini: ^3.0.0
   dotenv: ^4.2.0
   http: ^1.2.2
+  google_sign_in: ^6.2.2
+  sign_in_with_apple: ^6.1.4
 
 dev_dependencies:
   flutter_test:
