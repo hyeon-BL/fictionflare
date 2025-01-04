@@ -1,14 +1,14 @@
 import 'package:fictionflare_app/features/auth/componets/sign_button.dart';
 import 'package:fictionflare_app/features/auth/componets/square_tile.dart';
 import 'package:fictionflare_app/features/auth/componets/textfield.dart';
-import 'package:fictionflare_app/features/auth/screens/register_screens.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
   static const routeName = '/login-screen';
+  final Function()? onTap;
 
-  const LoginScreen({super.key});
+  const LoginScreen({super.key, required this.onTap});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -204,12 +204,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     const SizedBox(width: 4),
                     GestureDetector(
-                      onTap: () {
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (context) {
-                          return RegisterScreens();
-                        }));
-                      },
+                      onTap: widget.onTap,
                       child: const Text(
                         'Register now',
                         style: TextStyle(

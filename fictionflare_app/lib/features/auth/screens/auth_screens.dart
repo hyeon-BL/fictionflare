@@ -1,5 +1,5 @@
 import 'package:fictionflare_app/features/auth/screens/loading_screen.dart';
-import 'package:fictionflare_app/features/auth/screens/login_screens.dart';
+import 'package:fictionflare_app/features/auth/screens/login_or_register_screens.dart';
 import 'package:fictionflare_app/screens/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +13,6 @@ class AuthScreens extends StatelessWidget {
     return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
-
         // User is logged in
         if (snapshot.hasData) {
           return HomeScreen();
@@ -26,7 +25,7 @@ class AuthScreens extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return GameLoadingScreen();
             } else {
-              return LoginScreen();
+              return LoginOrRegisterScreens();
             }
           },
         );
